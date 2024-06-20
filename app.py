@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from flask import Response
 import pyodbc
 import matplotlib
 matplotlib.use('agg')  # Set non-interactive backend
@@ -79,7 +80,10 @@ def get_sales_data():
         plot_img = base64.b64encode(image_stream.getvalue()).decode('utf-8')
         plt.close()
 
-        return jsonify({'plot_img': plot_img})
+        response = Response(plot_img, mimetype='image/png')
+        response.headers['Content-Disposition'] = 'inline; filename=plot.png'
+        
+        return response
 
     except Exception as e:
         return jsonify({'error': str(e)})
