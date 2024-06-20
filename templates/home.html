@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Sales Graph</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Product Sales Graph</h1>
+    
+    <div>
+        <label for="product_id">Product ID:</label>
+        <input type="number" id="product_id" name="product_id" min="1" max="100">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" min="2022" max="2024" value="2022">
+        <button onclick="fetchSalesData()">Generate Graph</button>
+    </div>
+
+    <div id="sales-graph">
+        <!-- Sales graph will be inserted here -->
+    </div>
+
+    <script>
+        function fetchSalesData() {
+            var product_id = document.getElementById('product_id').value;
+            var year = document.getElementById('year').value;
+            var url = `/get_sales_data?product_id=${product_id}&year=${year}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var img = `<img src="data:image/png;base64,${data.plot_img}" alt="Sales Graph">`;
+                    document.getElementById('sales-graph').innerHTML = img;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+</body>
+</html>
